@@ -51,22 +51,25 @@ grass78
 Import the high-resolution GeoTIFF files into the GRASS database format.
 ```bash
 # 1. Import Original DEM (0.25 m)
-r.in.gdal -o input=TIFF/gy_elev.tif output=gy_elev_0p25
+r.in.gdal -o input=TIFF/gy_elev.tif output=gy_elev0p25
 ```
 ```bash
-# 2. Import Release Thickness Map
-r.in.gdal -o input=TIFF/gy_hrelease.tif output=gy_hrelease_0p25
+# 2. Import Release Thickness Map(2.5m)
+r.in.gdal -o input=TIFF/gy_hrelease.tif output=gy_hrelease0p25
 ```
-similarly for impact area raster map
 
+```bash
+# 2. Import Release Thickness Map (4.5m)
+r.in.gdal -o input=TIFF/impactarea.tif output=impactarea4p5m
+```
 #### 📏 4. Set Computational Region (Native)
 Check the region settings for the original high-resolution data.
 
 ```bash
 
-g.region raster=gy_elev_0p25 -p
+g.region -s rast=impactarea4p5m
 ```
-[!CAUTION] Warning: Current resolution is 0.25 m (~18.8 million cells). This is computationally too heavy for stable r.avaflow simulations on standard hardware. Downsampling is required.
+[!CAUTION] Warning: Current resolution of elevation and hrelease raster map is 0.25 m. This is computationally too heavy for stable r.avaflow simulations on standard hardware. Downsampling is required.
 
 #### 🔄 5. Resample Data to 5 m (Recommended)
 We use a 5 m resolution to achieve a balance between physical detail and numerical stability.
@@ -74,7 +77,7 @@ We use a 5 m resolution to achieve a balance between physical detail and numeric
 Step A: Set Target Resolution
 ```bash
 
-g.region raster=gy_elev_0p25 res=5
+g.region -s rast=impactarea res=5 -a
 ```
 Step B: Execute Resampling
 We use the average method to preserve the physical integrity of the terrain and thickness.
@@ -82,31 +85,39 @@ We use the average method to preserve the physical integrity of the terrain and 
 ```bash
 
 # Resample Elevation
-r.resamp.stats input=gy_elev_0p25 output=gy_elev_5 method=average
+r.resamp.stats input=gy_elev0p25m output=gy_elev method=average
 ```
+
+```bash
+# Check resolution
+r.info map=gy_elev
+```
+
 ```bash
 # Resample Release Thickness
-r.resamp.stats input=gy_hrelease_0p25 output=gy_hrelease_5 method=average
+r.resamp.stats input=gy_hrelease0p25m output=gy_hrelease method=average
+```
+```bash
+# Resample impact area Thickness
+r.resamp.stats input=impactarea4p5m output=impactarea method=average
 ```
 #### 🎯 6. Set Final Computational Region
 Finalize the environment settings before running the model.
 
 ```bash
-g.region raster=gy_elev_5 -p
+g.region -s rast=gy_elev
 ```
-Result: ~47,000 cells.
-
+```bash
+g.region -p
+```
+look for units,resolution, no of cells
 Status: 🟢 Optimized for simulation.
 
 #### 🚀 7. Run r.avaflow Simulation
-Execute a Solid-phase (s), single-phase landslide simulation.
+Execute a Solid-phase (1), single-phase landslide simulation.
 
 ```bash
-r.avaflow.40G \
-  elevation=gy_elev_5 \
-  hrelease=gy_hrelease_5 \
-  impactarea=gy_hrelease_5 \
-  phases=s
+r.avaflow.40G elevation=gy_elev_5 hrelease=gy_hrelease_5  impactarea=gy_hrelease_5 phases=1
 ```
 
 #### 📈 8. Model Execution Output
