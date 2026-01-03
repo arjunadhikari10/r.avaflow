@@ -193,5 +193,14 @@ another readme file
 ```
 
 ---
+Citation
 
+If you use r.avaflow in academic work, please cite:
+
+Mergili et al. (2017–2024), r.avaflow: mass flow simulation framework
+https://www.avaflow.org/
+
+This is documented by
+Arjun Adhikari
+Civil Engineering Student, Nepal
 
