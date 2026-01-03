@@ -139,24 +139,16 @@ mkdir ~/grassdata
 ```bash
 grass78
 ```
-
+In grass GUI
 - Create a **new location**: `wsl_test`
-- Choose a valid CRS (e.g., UTM / WGS84)
+- choose next
+- Choose a 'Read projection and datum terms from a georeferenced data file' (your data must be in projected CRS)
+-Browse and select your file
 - Mapset: `PERMANENT`
-
+Then start the grass gis
 > This creates `/home/arjun/grassdata/wsl_test/PERMANENT`
 
 ---
-
-## Step 8: Start GRASS Correctly
-
-```bash
-grass ~/grassdata/wsl_test/PERMANENT
-```
-
-You will see:
-
-```
 GRASS 7.8.2 (wsl_test):~ >
 ```
 
@@ -164,7 +156,7 @@ GRASS 7.8.2 (wsl_test):~ >
 
 ---
 
-## Step 9: Install r.avaflow Addon
+## Step 8: Install r.avaflow Addon
 
 Inside GRASS terminal:
 
@@ -182,7 +174,7 @@ Installation of <r.avaflow.40G> successfully finished
 
 ---
 
-## Step 10: Verify Installation
+## Step 9: Verify Installation
 
 Inside GRASS:
 
@@ -194,12 +186,10 @@ r.avaflow.40G --help
 
 ---
 
-## Step 11: Starting r.avaflow in Future
+## Step 10: Starting r.avaflow in Future
 
 ```bash
-wsl
-grass ~/grassdata/wsl_test/PERMANENT
-r.avaflow.40G
+another readme file
 ```
 
 ---
