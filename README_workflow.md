@@ -117,7 +117,7 @@ Status: 🟢 Optimized for simulation.
 Execute a Solid-phase (1), single-phase landslide simulation.
 
 ```bash
-r.avaflow.40G elevation=gy_elev_5 hrelease=gy_hrelease_5  impactarea=gy_hrelease_5 phases=1
+r.avaflow.40G elevation=gy_elev hrelease=gy_hrelease  impactarea=gy_hrelease phases=1
 ```
 
 #### 📈 8. Model Execution Output
