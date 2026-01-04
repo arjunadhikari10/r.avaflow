@@ -50,17 +50,17 @@ grass78
 #### 📥 3. Import Input Data
 Import the high-resolution GeoTIFF files into the GRASS database format.
 ```bash
-# 1. Import Original DEM (0.25 m)
-r.in.gdal -o input=TIFF/gy_elev.tif output=gy_elev0p25
+# 1. Import Original DEM (0.5 m)
+r.in.gdal -o input=TIFF/gy_elev0p5m.tif output=gy_elev0p5m
 ```
 ```bash
 # 2. Import Release Thickness Map(2.5m)
-r.in.gdal -o input=TIFF/gy_hrelease.tif output=gy_hrelease0p25
+r.in.gdal -o input=TIFF/gy_hrelease0p5m.tif output=gy_hrelease0p5m
 ```
 
 ```bash
 # 2. Import Release Thickness Map (4.5m)
-r.in.gdal -o input=TIFF/impactarea.tif output=impactarea4p5m
+r.in.gdal -o input=TIFF/gy_impactarea4p5m.tif output=gy_impactarea4p5m
 ```
 #### 📏 4. Set Computational Region (Native)
 Check the region settings for the original high-resolution data.
@@ -77,7 +77,7 @@ We use a 5 m resolution to achieve a balance between physical detail and numeric
 Step A: Set Target Resolution
 ```bash
 
-g.region -s rast=impactarea res=5 -a
+g.region -s rast=gy_elev0p5m res=5 -a
 ```
 Step B: Execute Resampling
 We use the average method to preserve the physical integrity of the terrain and thickness.
@@ -85,7 +85,7 @@ We use the average method to preserve the physical integrity of the terrain and 
 ```bash
 
 # Resample Elevation
-r.resamp.stats input=gy_elev0p25m output=gy_elev method=average
+r.resamp.stats input=gy_elev0p5m output=gy_elev method=average
 ```
 
 ```bash
@@ -95,11 +95,11 @@ r.info map=gy_elev
 
 ```bash
 # Resample Release Thickness
-r.resamp.stats input=gy_hrelease0p25m output=gy_hrelease method=average
+r.resamp.stats input=gy_hrelease0p5m output=gy_hrelease method=average
 ```
 ```bash
 # Resample impact area Thickness
-r.resamp.stats input=impactarea4p5m output=impactarea method=average
+r.resamp.stats input=gy_impactarea4p5m output=gy_impactarea method=average
 ```
 #### 🎯 6. Set Final Computational Region
 Finalize the environment settings before running the model.
@@ -117,7 +117,7 @@ Status: 🟢 Optimized for simulation.
 Execute a Solid-phase (1), single-phase landslide simulation.
 
 ```bash
-r.avaflow.40G elevation=gy_elev hrelease=gy_hrelease  impactarea=gy_hrelease phases=1
+r.avaflow.40G elevation=gy_elev hrelease=gy_hrelease  impactarea=gy_impactarea phases=1
 ```
 
 #### 📈 8. Model Execution Output
